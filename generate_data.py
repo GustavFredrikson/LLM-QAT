@@ -20,7 +20,7 @@ model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
 print("Model loaded!")
 
 n_vocab = 500 # number of initial tokens for synthesizing data on each GPU.
-
+print(os.listdir())
 i_start = sys.argv[1]
 if os.path.exists("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl"):
     with open("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl", "r") as f:
