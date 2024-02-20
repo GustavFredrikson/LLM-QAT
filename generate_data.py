@@ -12,11 +12,11 @@ import sys
 import os
 
 print("Loading tokenizer")
-tokenizer = AutoTokenizer.from_pretrained("decapoda-research/llama-7b-hf")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 print("Tokenizer loaded!")
 print("Loading model")
-model = AutoModelForCausalLM.from_pretrained("decapoda-research/llama-7b-hf")
-model = model.cuda()
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
+# model = model.cuda()
 print("Model loaded!")
 
 n_vocab = 500 # number of initial tokens for synthesizing data on each GPU.
@@ -37,7 +37,8 @@ if not os.path.exists("gen_data"):
 for j in range(3 + outer_loop, 6):
     for i in range(int(i_start) * n_vocab + inner_loop, (int(i_start)+1) * n_vocab):
         print(i)
-        input_ids = torch.tensor([[i]]).cuda()
+        # input_ids = torch.tensor([[i]]).cuda()
+        input_ids = torch.tensor([[i]])
         print("generating")
         outputs1 = model.generate(input_ids, do_sample=False, max_length=j)
         outputs = model.generate(outputs1, do_sample=True, max_length=2048)
