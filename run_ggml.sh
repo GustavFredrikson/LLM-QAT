@@ -7,8 +7,7 @@ pip install -U "huggingface_hub[cli]"
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
 
-# Step 2: Compile the software
-make clean && LLAMA_CUBLAS=1 make -j
+
 
 # Step 3: Download and extract the dataset
 wget https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip
@@ -22,6 +21,8 @@ wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/L
 
 # Step 5: Run the perplexity calculation
 # Adjust the file path to the dataset correctly
+make clean && LLAMA_CUBLAS=1 make -j
+
 ./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw
 
 # End of script
