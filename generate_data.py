@@ -38,8 +38,8 @@ if not os.path.exists("gen_data"):
 for j in range(3 + outer_loop, 6):
     for i in range(int(i_start) * n_vocab + inner_loop, (int(i_start)+1) * n_vocab):
         print(i)
-        # input_ids = torch.tensor([[i]]).cuda()
-        input_ids = torch.tensor([[i]])
+        input_ids = torch.tensor([[i]]).cuda()
+        # input_ids = torch.tensor([[i]])
         print("generating")
         outputs1 = model.generate(input_ids, do_sample=False, max_length=j)
         outputs = model.generate(outputs1, do_sample=True, max_length=2048)
