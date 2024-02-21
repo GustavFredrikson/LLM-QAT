@@ -4,13 +4,16 @@ import json
 import sys
 import os
 
-print("Loading tokenizer")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
-print("Tokenizer loaded!")
-print("Loading model")
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
-model = model.cuda()
-print("Model loaded!")
+model_name_or_path = "TheBloke/Llama-2-7b-Chat-GPTQ"
+# To use a different branch, change revision
+# For example: revision="gptq-4bit-64g-actorder_True"
+model = AutoModelForCausalLM.from_pretrained(model_name_or_path,
+                                             device_map="auto",
+                                             trust_remote_code=False,
+                                             revision="gptq-4bit-64g-actorder_True")
+
+tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
+print("Loaded tokenizer and model")
 
 # Wrap the generation in torch.no_grad() to reduce memory usage
 with torch.no_grad():
