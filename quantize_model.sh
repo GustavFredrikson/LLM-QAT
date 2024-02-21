@@ -1,24 +1,25 @@
 #!/bin/bash
 
-# Clone llama.cpp and compile
-git clone https://github.com/ggerganov/llama.cpp
-cd llama.cpp && git pull && LLAMA_CUBLAS=1 make
-cd ..
+# Define model and directories
+MODEL_NAME="gemma-7b"
+LLM_QAT_DIR="/root/LLM-QAT"
+LLAMA_CPP_DIR="${LLM_QAT_DIR}/llama.cpp"
+
+# Clone the LLM-QAT repository if it doesn't exist, or update it if it does
+if [ ! -d "${LLM_QAT_DIR}" ]; then
+    git clone https://github.com/GustavFredrikson/LLM-QAT.git ${LLM_QAT_DIR}
+else
+    (cd ${LLM_QAT_DIR} && git pull)
+fi
+
+# Clone and build llama.cpp
+if [ ! -d "${LLAMA_CPP_DIR}" ]; then
+    git clone https://github.com/ggerganov/llama.cpp ${LLAMA_CPP_DIR}
+    (cd ${LLAMA_CPP_DIR} && git pull && make clean && LLAMA_CUBLAS=1 make)
+fi
 
 # Install Python dependencies
-pip install -q -r llama.cpp/requirements.txt
+pip install -q -r ${LLAMA_CPP_DIR}/requirements.txt
 pip install -q huggingface_hub
 
-# Clone the model repository (Placeholder for actual model download command)
-git lfs install
-git clone https://huggingface.co/google/gemma-7b
-
-# Define the model ID and name for further processing
-MODEL_ID="google/gemma-7b"
-MODEL_NAME="gemma-7b"
-
-# Convert the model weights to FP16 format
-python llama.cpp/convert.py $MODEL_NAME --outtype f16 --outfile "${MODEL_NAME}/${MODEL_NAME}.fp16.bin"
-
-# # Run the Python script to quantize and upload models
-# python quantize_and_upload.py $MODEL_NAME
+echo "Setup and dependencies installed."
