@@ -40,10 +40,11 @@ for j in range(3 + outer_loop, 6):
         print(i)
         input_ids = torch.tensor([[i]]).cuda()
         # input_ids = torch.tensor([[i]])
-        print("generating")
+        print("Generating original...")
         outputs1 = model.generate(input_ids, do_sample=False, max_length=j)
-        print("Generating from outputs1")
+        print("Generating from outputs1...")
         outputs = model.generate(outputs1, do_sample=True, max_length=2048)
+        print("Generated from outputs")
         gen_text = tokenizer.batch_decode(outputs, skip_special_tokens=True)
         text_dict = {"text" : gen_text[0]}
         with open("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl", "a") as f:
