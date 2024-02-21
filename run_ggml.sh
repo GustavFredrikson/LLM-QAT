@@ -23,6 +23,6 @@ wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/L
 # Adjust the file path to the dataset correctly
 make clean && LLAMA_CUBLAS=1 make -j
 
-./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw --n-gpu-layers 20
+./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw --n-gpu-layers 50
 
 # End of script
