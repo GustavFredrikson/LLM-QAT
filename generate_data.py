@@ -12,11 +12,11 @@ import sys
 import os
 
 print("Loading tokenizer")
-tokenizer = AutoTokenizer.from_pretrained("TheBloke/Llama-2-7B-Chat-AWQ")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b")
 print("Tokenizer loaded!")
 print("Loading model")
 print(os.listdir())
-llm = AutoModelForCausalLM.from_pretrained("TheBloke/Llama-2-7b-Chat-GGUF", from_tf=True, model_file="llama-2-7b-chat.q4_K_M.gguf", model_type="llama", gpu_layers=50)
+llm = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b")
 model = model.cuda()
 print("Model loaded!")
 
