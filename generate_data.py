@@ -17,7 +17,7 @@ print("Tokenizer loaded!")
 print("Loading model")
 print(os.listdir())
 model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
-model = model.cuda()
+# model = model.cuda()
 print("Model loaded!")
 
 n_vocab = 500 # number of initial tokens for synthesizing data on each GPU.
