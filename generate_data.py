@@ -21,7 +21,7 @@ model = AutoModelForCausalLM.from_pretrained(model_name_or_path,
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
 print("Model loaded!")
 
-n_vocab = 500 # number of initial tokens for synthesizing data on each GPU.
+n_vocab = 100 # number of initial tokens for synthesizing data on each GPU.
 i_start = sys.argv[1]
 if os.path.exists("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl"):
     with open("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl", "r") as f:
@@ -42,9 +42,11 @@ for j in range(3 + outer_loop, 6):
         # input_ids = torch.tensor([[i]])
         print("generating")
         outputs1 = model.generate(input_ids, do_sample=False, max_length=j)
+        print("Generating from outputs1")
         outputs = model.generate(outputs1, do_sample=True, max_length=2048)
         gen_text = tokenizer.batch_decode(outputs, skip_special_tokens=True)
         text_dict = {"text" : gen_text[0]}
         with open("gen_data/gen.chunk."+str(i_start).zfill(2)+".jsonl", "a") as f:
+            print("Saving...")
             f.write(json.dumps(text_dict))
             f.write('\n')
