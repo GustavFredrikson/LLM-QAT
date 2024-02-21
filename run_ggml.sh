@@ -11,7 +11,7 @@ cd llama.cpp
 
 # Step 3: Download and extract the dataset
 wget https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip
-unzip wikitext-2-raw-v1.zip -d data
+unzip -o wikitext-2-raw-v1.zip -d data
 
 # No need to move files since we will adjust the path in the perplexity command
 
@@ -23,6 +23,6 @@ wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/L
 # Adjust the file path to the dataset correctly
 make clean && LLAMA_CUBLAS=1 make -j
 
-./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw
+./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw --n-gpu-layers 5
 
 # End of script
