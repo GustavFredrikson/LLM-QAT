@@ -14,27 +14,14 @@ make
 wget https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip
 unzip wikitext-2-raw-v1.zip -d data
 
-# Adjusting the directory for the extracted files
-# Make sure the file name matches what the perplexity tool expects
-mv data/wikitext-2-raw-v1/wiki.test.raw data/
+# No need to move files since we will adjust the path in the perplexity command
 
-# Step 4: Download the model using Hugging Face CLI
-# Specifying the correct model and adjusting cache-dir to place it correctly
-huggingface-cli download TheBloke/Llama-2-7B-Chat-GGUF --cache-dir ./models/7B -f llama-2-7b-chat.Q4_K_M.gguf
-
-# The model is expected to be in a specific path structure after download
-# We need to ensure the model file name is correct and placed as expected
-# Here we assume the model file is named correctly in the downloaded structure
-# Find the downloaded model and move it to the expected location
-# model_path=$(find models -name "*.gguf")
-# echo "Model found at: $model_path"
-
-# # Ensure the target directory exists and move the model file there
-# mkdir -p models/7B
-# mv "$model_path" models/7B/ggml-model-q4_0.gguf
+# Step 4: Download the specific model file directly
+mkdir -p models/7B
+wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
 
 # Step 5: Run the perplexity calculation
-# Ensure the file path to the dataset is correct
-./perplexity -m models/7B/ggml-model-q4_0.gguf -f data/wiki.test.raw
+# Adjust the file path to the dataset correctly
+./perplexity -m models/7B/llama-2-7b-chat.Q4_K_M.gguf -f data/wikitext-2-raw/wiki.test.raw
 
 # End of script
