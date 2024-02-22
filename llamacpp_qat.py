@@ -3,6 +3,7 @@ import os
 import json
 import sys
 from pathlib import Path
+from tqdm import tqdm
 
 # Define the model path and clone if it does not exist
 repo_url = "https://github.com/ggerganov/llama.cpp"
@@ -71,9 +72,11 @@ def main(i_start=0):
 
     model_path = Path("models/7B/llama-2-7b-chat.Q4_K_M.gguf")
 
+    total_iterations = (6 - (3 + outer_loop)) * ((i_start + 1) * n_vocab + inner_loop - (i_start * n_vocab + inner_loop))
+
     # Main loop to generate text
-    for j in range(3 + outer_loop, 6):
-        for i in range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab):
+    with tqdm(total=total_iterations, desc="Generating Text") as pbar:
+        for i in tqdm(range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab)):
             print(f"Processing index {i} with max length {j}")
 
             # Generate initial text with a random or predefined prompt
