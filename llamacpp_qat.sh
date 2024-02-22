@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Define the model path
-
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
 
 # Directory to store generated data
 GEN_DATA_DIR="gen_data"
@@ -43,9 +44,6 @@ else
     wget -O $MODEL_PATH "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
 fi
 
-
-# Step 5: Run the perplexity calculation
-# Adjust the file path to the dataset correctly
 LLAMA_CUBLAS=1 make -j
 
 # Main loop to generate text
