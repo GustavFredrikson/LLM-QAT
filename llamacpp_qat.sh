@@ -26,10 +26,23 @@ else
     OUTER_LOOP=0
 fi
 
-mkdir -p models/7B
-wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
-
+# Define the model path
 MODEL_PATH="models/7B/llama-2-7b-chat.Q4_K_M.gguf"
+
+# Directory where the model will be stored
+MODEL_DIR="models/7B"
+
+# Check if the model file exists
+if [ -f "$MODEL_PATH" ]; then
+    echo "Model already exists at $MODEL_PATH, skipping download."
+else
+    echo "Model not found at $MODEL_PATH, downloading..."
+    # Ensure the model directory exists
+    mkdir -p $MODEL_DIR
+    # Download the model
+    wget -O $MODEL_PATH "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
+fi
+
 
 # Step 5: Run the perplexity calculation
 # Adjust the file path to the dataset correctly
