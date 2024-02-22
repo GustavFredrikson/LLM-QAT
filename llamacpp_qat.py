@@ -58,7 +58,7 @@ def main(i_start=0):
     gen_data_dir = Path("gen_data")
     gen_data_dir.mkdir(parents=True, exist_ok=True)
 
-    n_vocab = 100  # Number of initial tokens for synthesizing data
+    n_vocab = 500  # Number of initial tokens for synthesizing data
     file_path = gen_data_dir / f"gen.chunk.{i_start:02}.jsonl"
 
     if file_path.exists():
