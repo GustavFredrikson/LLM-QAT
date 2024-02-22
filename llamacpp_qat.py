@@ -79,7 +79,7 @@ def main(i_start=0):
     for j in tqdm(range(3 + outer_loop, 6), desc='Outer loop'):
         for i in tqdm(range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab), desc=f'Generating text for chunk {j}'):
             # Generate initial text with a random or predefined prompt
-            initial_prompt = str(i)
+            initial_prompt = ""
 
             # First generation step with llama.cpp
             first_output = run_llama(model_path, initial_prompt, j)
