@@ -45,21 +45,51 @@ if not model_path.exists():
 os.environ["LLAMA_CUBLAS"] = "1"
 subprocess.run(["make", "-j"], check=True)
 
-# Main loop to generate text
-for j in range(3 + outer_loop, 6):
-    for i in range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab):
-        print(f"Processing index {i} with max length {j}")
-        
-        # Generate initial text with a random or predefined prompt
-        initial_prompt = str(i)
-        
-        # First generation step with llama.cpp
-        first_output = subprocess.check_output(['./main', '-m', str(model_path), '-p', initial_prompt, '-n', str(j), '--n-gpu-layers', '100'])
-        
-        # Clean quotation marks from first_output before writing to the JSONL file
-        second_prompt = first_output.decode('utf-8').replace('"', '\\"')
-        
-        # Format and save the final output to the JSONL file
-        with open(file_path, 'a') as file:
-            json.dump({"text": second_prompt}, file)
-            file.write('\n')
+# Function to run llama.cpp with given parameters and return output
+def run_llama(model_path, prompt, max_length, n_gpu_layers=100):
+    result = subprocess.run(['./main', '-m', str(model_path), '-p', prompt, '-n', str(max_length), '--n-gpu-layers', str(n_gpu_layers)],
+                            capture_output=True, text=True)
+    return result.stdout
+
+# Main process
+def main(i_start=0):
+    # Setup
+    gen_data_dir = Path("gen_data")
+    gen_data_dir.mkdir(parents=True, exist_ok=True)
+
+    n_vocab = 100  # Number of initial tokens for synthesizing data
+    file_path = gen_data_dir / f"gen.chunk.{i_start:02}.jsonl"
+
+    if file_path.exists():
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        inner_loop = len(lines) % n_vocab
+        outer_loop = len(lines) // n_vocab
+    else:
+        inner_loop = 0
+        outer_loop = 0
+
+    model_path = Path("models/7B/llama-2-7b-chat.Q4_K_M.gguf")
+
+    # Main loop to generate text
+    for j in range(3 + outer_loop, 6):
+        for i in range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab):
+            print(f"Processing index {i} with max length {j}")
+
+            # Generate initial text with a random or predefined prompt
+            initial_prompt = str(i)
+
+            # First generation step with llama.cpp
+            first_output = run_llama(model_path, initial_prompt, j)
+
+            # Second generation step with llama.cpp, using the output of the first as the new prompt
+            second_output = run_llama(model_path, first_output, 2048)
+
+            # Save the final output to the JSONL file
+            with open(file_path, 'a') as file:
+                json.dump({"text": second_output}, file)
+                file.write('\n')
+
+if __name__ == "__main__":
+    i_start = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+    main(i_start)
