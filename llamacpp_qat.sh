@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the model path
-MODEL_PATH="/path/to/your/model.gguf"
+
 
 # Directory to store generated data
 GEN_DATA_DIR="gen_data"
@@ -28,6 +28,8 @@ fi
 
 mkdir -p models/7B
 wget -O models/7B/llama-2-7b-chat.Q4_K_M.gguf "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
+
+MODEL_PATH="models/7B/llama-2-7b-chat.Q4_K_M.gguf"
 
 # Step 5: Run the perplexity calculation
 # Adjust the file path to the dataset correctly
