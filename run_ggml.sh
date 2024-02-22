@@ -7,8 +7,6 @@ pip install -U "huggingface_hub[cli]"
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
 
-
-
 # Step 3: Download and extract the dataset
 wget https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip
 unzip -o wikitext-2-raw-v1.zip -d data
