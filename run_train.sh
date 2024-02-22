@@ -5,7 +5,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-torchrun --nproc_per_node=8 --master_port=15001 train.py \
+torchrun --nproc_per_node=1 --master_port=15001 train.py \
 --local_dir "/tmp/llama/" \
 --input_model_filename "meta-llama/Llama-2-7b-hf" \
 --output_model_filename "7B-finetuned" \
