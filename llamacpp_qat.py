@@ -75,10 +75,9 @@ def main(i_start=0):
     total_iterations = (6 - (3 + outer_loop)) * ((i_start + 1) * n_vocab + inner_loop - (i_start * n_vocab + inner_loop))
 
     # Main loop to generate text
-    with tqdm(total=total_iterations, desc="Generating Text") as pbar:
-        for i in tqdm(range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab)):
-            print(f"Processing index {i} with max length {j}")
 
+    for j in tqdm(range(3 + outer_loop, 6), desc='Outer loop'):
+        for i in tqdm(range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab), desc=f'Generating text for chunk {j}'):
             # Generate initial text with a random or predefined prompt
             initial_prompt = str(i)
 
