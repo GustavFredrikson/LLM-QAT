@@ -39,6 +39,7 @@ for j in range(3 + outer_loop, 6):
     for i in range(int(i_start) * n_vocab + inner_loop, (int(i_start)+1) * n_vocab):
         print(i)
         input_ids = torch.tensor([[i]]).cuda()
+        print(input_ids)
         # input_ids = torch.tensor([[i]])
         print("Generating original...")
         outputs1 = model.generate(input_ids, do_sample=False, max_length=j)

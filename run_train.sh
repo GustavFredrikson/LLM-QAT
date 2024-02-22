@@ -14,8 +14,8 @@ torchrun --nproc_per_node=8 --master_port=15001 train.py \
 --do_train True \
 --do_eval True \
 --model_max_length 2048 \
---fp16 False \
---bf16 True \
+--fp16 True \
+--bf16 False \
 --log_on_each_node False \
 --logging_dir /tmp/output/runs/current \
 --num_train_epochs 1 \
