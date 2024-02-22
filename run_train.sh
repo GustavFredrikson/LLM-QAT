@@ -7,7 +7,7 @@
 
 torchrun --nproc_per_node=8 --master_port=15001 train.py \
 --local_dir "/tmp/llama/" \
---input_model_filename "TheBloke/Llama-2-7B-Chat-GGUF" \
+--input_model_filename "meta-llama/Llama-2-7b" \
 --output_model_filename "7B-finetuned" \
 --train_data_local_path "gen_data.jsonl" \
 --eval_data_local_path "wiki2.jsonl" \
