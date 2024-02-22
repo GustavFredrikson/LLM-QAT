@@ -63,6 +63,9 @@ for (( j=3+OUTER_LOOP; j<6; j++ )); do
         # Second generation step with llama.cpp, using the output of the first as the new prompt
         ./main -m $MODEL_PATH -p "$SECOND_PROMPT" -n 2048 > second_output.txt --n-gpu-layers 100
         
+        # Clean quotation marks from second_output.txt before writing to the JSONL file
+        sed -i 's/"/\\"/g' second_output.txt
+
         # Format and save the final output to the JSONL file
         echo "{\"text\": \"$(<second_output.txt)\"}" >> $FILE
     done
