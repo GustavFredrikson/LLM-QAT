@@ -1,0 +1,65 @@
+import subprocess
+import os
+import json
+import sys
+from pathlib import Path
+
+# Define the model path and clone if it does not exist
+repo_url = "https://github.com/ggerganov/llama.cpp"
+repo_dir = Path("llama.cpp")
+if not repo_dir.exists():
+    subprocess.run(["git", "clone", repo_url], check=True)
+os.chdir(repo_dir)
+
+# Directory to store generated data
+gen_data_dir = Path("gen_data")
+gen_data_dir.mkdir(parents=True, exist_ok=True)
+
+# Start index from command line argument, default to 0 if not provided
+i_start = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+
+# Number of initial tokens for synthesizing data
+n_vocab = 100
+
+# File check and determination of inner and outer loop values
+file_path = gen_data_dir / f"gen.chunk.{i_start:02}.jsonl"
+if file_path.exists():
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    inner_loop = len(lines) % n_vocab
+    outer_loop = len(lines) // n_vocab
+else:
+    inner_loop = 0
+    outer_loop = 0
+
+# Define and check the model path
+model_path = Path("models/7B/llama-2-7b-chat.Q4_K_M.gguf")
+model_dir = model_path.parent
+model_dir.mkdir(parents=True, exist_ok=True)
+if not model_path.exists():
+    print("Model not found at", model_path, ", downloading...")
+    url = "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf?download=true"
+    subprocess.run(["wget", "-O", str(model_path), url], check=True)
+
+# Environment variable for llama.cpp
+os.environ["LLAMA_CUBLAS"] = "1"
+subprocess.run(["make", "-j"], check=True)
+
+# Main loop to generate text
+for j in range(3 + outer_loop, 6):
+    for i in range(i_start * n_vocab + inner_loop, (i_start + 1) * n_vocab):
+        print(f"Processing index {i} with max length {j}")
+        
+        # Generate initial text with a random or predefined prompt
+        initial_prompt = str(i)
+        
+        # First generation step with llama.cpp
+        first_output = subprocess.check_output(['./main', '-m', str(model_path), '-p', initial_prompt, '-n', str(j), '--n-gpu-layers', '100'])
+        
+        # Clean quotation marks from first_output before writing to the JSONL file
+        second_prompt = first_output.decode('utf-8').replace('"', '\\"')
+        
+        # Format and save the final output to the JSONL file
+        with open(file_path, 'a') as file:
+            json.dump({"text": second_prompt}, file)
+            file.write('\n')
