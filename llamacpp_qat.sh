@@ -33,7 +33,7 @@ MODEL_PATH="models/7B/llama-2-7b-chat.Q4_K_M.gguf"
 
 # Step 5: Run the perplexity calculation
 # Adjust the file path to the dataset correctly
-make clean && LLAMA_CUBLAS=1 make -j
+LLAMA_CUBLAS=1 make -j
 
 # Main loop to generate text
 for (( j=3+OUTER_LOOP; j<6; j++ )); do
